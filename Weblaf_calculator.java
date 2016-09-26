@@ -2,40 +2,60 @@ package cal;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import com.alee.laf.WebLookAndFeel;
 
+import java.lang.Math;
+
 
 public class Weblaf_calculator extends JFrame implements ActionListener{
-	
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -5568239470063633971L;
+	private static final long serialVersionUID = -5339796203542366207L;
+	/**
+	 * Science界面
+	 */
 	//15个函数功能键的名字
-	private final String[] FUNC_KEYS = { "", "", "", "", "", "", "", "",
-            "", "", "", "", "", "", ""};
+	private final String[] FUNC_KEYS = {"Abs", "sin", "cos", "x^2", "x^3", "a^x", "tan", "deg-rad", "x^y", "1/x", "+/-", "log", "ln", "x!", "√x",  
+             };
 	//15个函数功能键
     private JButton func_keys[] = new JButton[FUNC_KEYS.length];
-    
     //计算器下方数字和运算符键的名字
     private final String[] KEYS = { "7", "8", "9", "*", "(", "4", "5", "6",
             "/", ")", "1", "2", "3", "+", "=", "0", ".", "-" };
     //计算器下方数字和运算符键
     private JButton keys[] = new JButton[KEYS.length];
-    //文本显示区域
+    //Science界面文本显示区域
     JTextField reText = new JTextField("0");
+    /**
+	 * Matrix界面
+	 */
+    //Matrix界面文本显示区域
+    JTextArea MatrixText = new JTextArea("input matrix here:", 10, 10);
+    // 6个按钮
+    private final String[] MATRIX_KEYS = {"←", "=", "Add", "Dif", "Mul", "Det", "Rank", "UpT", "Eig",
+    		"Rev", "Tra"};
+    private JButton matrix_keys[] = new JButton[MATRIX_KEYS.length];
+    /**
+     * 变量部分
+     */
     // 标志用户按的是否是整个表达式的第一个数字,或者是运算符后的第一个数字
     private boolean firstDigit = true;
     // 计算的中间结果。
@@ -69,12 +89,12 @@ public class Weblaf_calculator extends JFrame implements ActionListener{
         //采用TabbedPane,实现多标签切换,共有3个选项卡		
 		JTabbedPane background = new JTabbedPane(JTabbedPane.NORTH);
 		
-		
 		//初始化第一个面板
 		JPanel Pane1 = new JPanel();
-		Pane1.setLayout(null);//设置布局NULL 
+		Pane1.setLayout(null);//设置布局NULL，采用绝对布局
 		
 		//文本显示区域
+		
         reText.setBounds(28, 20, 370, 120);//设置文本框区域位置及大小
         reText.setHorizontalAlignment(JTextField.RIGHT);// 文本框中的内容采用右对齐方式
         reText.setEditable(false);// 不允许修改结果文本框
@@ -104,7 +124,6 @@ public class Weblaf_calculator extends JFrame implements ActionListener{
         for(int i = 0; i < 14; i++) {
         	keys[i] = new JButton(KEYS[i]);
         	Pane1.add(keys[i]);
-        	
         	keys[i].setBounds(i%5*(66+10)+28, i/5*(35+10)+305, 66, 35);
         }
         //等号键
@@ -125,8 +144,39 @@ public class Weblaf_calculator extends JFrame implements ActionListener{
         
         //初始化第二个面板
         JPanel Pane2 = new JPanel();
-        //初始化第三个面板
+        
+        
+        // 初始化第三个面板
         JPanel Pane3 = new JPanel();
+        Pane3.setLayout(null);
+        // matrix界面文本显示区域
+        final JTextArea textArea = new JTextArea ( "input matrix here:\n" );
+        final JScrollPane scrollPane = new JScrollPane ( textArea );
+        //scrollPane.setPreferredSize ( new Dimension ( 300, 150 ) );
+        scrollPane.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+        scrollPane.setHorizontalScrollBarPolicy ( ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS );
+        scrollPane.setBounds(28, 20, 370, 200);
+        Pane3.add(scrollPane);
+        
+        // 装饰用progress bar
+        final JProgressBar progressBar = new JProgressBar ();
+        progressBar.setIndeterminate ( true );
+        progressBar.setBounds(28, 235, 370, 20);
+        Pane3.add(progressBar);
+        
+        // 初始化按键
+        for(int i = 0; i < 11; i++) {
+        	matrix_keys[i] = new JButton(MATRIX_KEYS[i]);
+        }
+        matrix_keys[0].setBounds(28, 275, 100, 30);
+        matrix_keys[1].setBounds(298, 275, 100, 30);
+        Pane3.add(matrix_keys[0]);
+        Pane3.add(matrix_keys[1]);
+        for(int i = 0; i < 9; i++) {
+            matrix_keys[i+2].setBounds(i%3*(100+35)+28, i/3*(30+20)+325, 100, 30);
+            Pane3.add(matrix_keys[i+2]);
+        }
+        
         //将三个面板加入tabbedpand
         background.add("Science",Pane1);
         background.add("Finance",Pane2);
@@ -163,7 +213,6 @@ public class Weblaf_calculator extends JFrame implements ActionListener{
         } else if ("0123456789.".indexOf(label) >= 0) {
             // 用户按了数字键或者小数点键
             handleNumber(label);
-            // handlezero(zero);
         } else {
             // 用户按了运算符键
             handleOperator(label);
@@ -237,6 +286,24 @@ public class Weblaf_calculator extends JFrame implements ActionListener{
         }  else if (operator.equals("=")) {
             // 赋值运算
             resultNum = getNumberFromText();
+        }  else if (operator.equals("Abs")) {
+        	//绝对值运算
+        	resultNum = Math.abs(resultNum);
+        }  else if (operator.equals("sin")) {
+        	// sin运算
+        	resultNum = Math.sin(resultNum*Math.PI/180);
+        }  else if (operator.equals("cos")) {
+            // cos运算
+        	resultNum = Math.cos(resultNum*Math.PI/180);
+        }  else if (operator.equals("x^2")) {
+            // 平方运算
+        	resultNum *= getNumberFromText();
+        }  else if (operator.equals("x^3")) {
+            // 立方运算
+        	resultNum = getNumberFromText()*getNumberFromText()*getNumberFromText();
+        }  else if (operator.equals("+/-")) {
+            // 正数负数运算
+            resultNum = resultNum * (-1);
         }
         if (operateValidFlag) {
             // 双精度浮点数的运算
@@ -250,10 +317,18 @@ public class Weblaf_calculator extends JFrame implements ActionListener{
                 reText.setText(String.valueOf(resultNum));
             }
         }
+        else {
+        	reText.setText("输入无效，请重新输入");
+        }
         // 运算符等于用户按的按钮
         operator = key;
         firstDigit = true;
         operateValidFlag = true;
+    }
+    //处理sin被按下的事件
+    private void handleSin() {
+    	resultNum = Math.sin(resultNum*Math.PI/180);
+    	reText.setText(String.valueOf(resultNum));
     }
     
     // 从结果文本框中获取数字
