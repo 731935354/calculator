@@ -61,7 +61,7 @@ public class zlz_calculator extends JFrame implements ActionListener{
     JTextArea fText = new JTextArea("");
     //按键
     JButton clear = new JButton("clear");
-    private final String[] F_KEYS = {"EAR", "call", "put", "pvc", "fvc", "fpwsc", "fpwcy", "FV", "PV", "PMT", "forward", "forwardwcs", "fpwcdy"};
+    private final String[] F_KEYS = {"EAR", "PV", "FV", "call", "pvc", "fvc", "put", "PMT", "forward", "forwardwcs", "fpwcdy", "fpwsc", "fpwcy"};
     private JButton f_keys[] = new JButton[F_KEYS.length];
     // 变量
     static double[] num1 = null; //存放非数组形式参数
@@ -312,7 +312,7 @@ public class zlz_calculator extends JFrame implements ActionListener{
         	 handelcall();
         }else if(label.equals("put")){
         	 handelput();
-        }else if(label.equals("pcv")){
+        }else if(label.equals("pvc")){
         	handelpvc();
         }else if(label.equals("fvc")){
         	handelfvc();
@@ -472,8 +472,9 @@ public class zlz_calculator extends JFrame implements ActionListener{
     private void handelAnswer(){
     	if(statuesnumber == 0){
     		double[][] answer = getMatrixfromText();
+    		textArea.setText("");
     		for(int i = 0; i<answer.length; i++){
-    			for(int j = 0; j<answer[0].length;i++){
+    			for(int j = 0; j<answer[0].length;j++){
     			  textArea.append(String.valueOf(answer[i][j])+"  ");	
     			}
     			textArea.append("\n");
@@ -518,6 +519,10 @@ public class zlz_calculator extends JFrame implements ActionListener{
     			textArea.append("\n"); 
     		}
     		statuesnumber = 0; 
+    	}
+    	if(statuesnumber != 0 && statuesnumber != 1 && statuesnumber != 2 && statuesnumber != 3)
+    {
+    		textArea.setText("");
     	}
     }
     
@@ -1166,7 +1171,7 @@ public class zlz_calculator extends JFrame implements ActionListener{
         if (addend[0].length != summand.length) {
             //throw new IllegalArgumentException("summand and summand not the same type!");
         	textArea.setText("");
-        	textArea.setText("summand and summand not the same type!");
+        	textArea.setText("矩阵A列数与矩阵B行数不一致，请重新输入");
         } 
         double[][] sum = new double[row][col];
         for (int i = 0; i < row; i++) {
@@ -1205,7 +1210,7 @@ public class zlz_calculator extends JFrame implements ActionListener{
 	        if (row != summand.length || col != summand[0].length) {
 	            //throw new IllegalArgumentException("summand and summand not the same type!");
 	        	textArea.setText("");
-	        	textArea.setText("summand and summand not the same type!");
+	        	textArea.setText("matrix A and matrix B are not the same type!");
 	        }
 	        double[][] sum = new double[row][col];
 	        for (int i = 0; i < row; i++) {
@@ -1240,7 +1245,7 @@ public class zlz_calculator extends JFrame implements ActionListener{
 	        if (row != summand.length || col != summand[0].length) {
 	            //throw new IllegalArgumentException("summand and summand not the same type!");
 	        	textArea.setText("");
-	        	textArea.setText("summand and summand not the same type!");
+	        	textArea.setText("两矩阵行数列数不相等，请重新输入");
 	        }
 	        double[][] sum = new double[row][col];
 	        for (int i = 0; i < row; i++) {
