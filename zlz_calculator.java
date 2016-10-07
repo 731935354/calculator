@@ -26,6 +26,10 @@ import java.util.StringTokenizer;
 public class zlz_calculator extends JFrame implements ActionListener{
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8495393877621495993L;
+	/**
 	 * Science界面
 	 */
 	//AC与退格键
@@ -60,13 +64,15 @@ public class zlz_calculator extends JFrame implements ActionListener{
     //finance界面文本显示区域
     JTextArea fText = new JTextArea("");
     //按键
-    JButton clear = new JButton("clear");
-    private final String[] F_KEYS = {"EAR", "PV", "FV", "call", "pvc", "fvc", "put", "PMT", "forward", "forwardwcs", "fpwcdy", "fpwsc", "fpwcy"};
+    JButton clear = new JButton("CLEAR");
+    JButton ENTER = new JButton("ENTER");
+    private final String[] F_KEYS = {"EAR", "fvc", "FV", "call", "pvc", "PV", "put", "PMT", "forward", "forwardwcs", "fpwcdy", "fpwsc", "fpwcy"};
     private JButton f_keys[] = new JButton[F_KEYS.length];
     // 变量
     static double[] num1 = null; //存放非数组形式参数
     static double[] num2 = null; //存放第一个数组内参数
 	static double[] num3 = null; //存放第二个数组
+	int AnswerStatus;
     /**
 	 * Matrix界面
 	 */
@@ -129,8 +135,10 @@ public class zlz_calculator extends JFrame implements ActionListener{
 				
 	    //加入2个功能键   
 		Pane1.add(backspace);
+		backspace.setForeground(Color.red);
 		backspace.setBounds(298, 155, 100, 30);
 		Pane1.add(AC);
+		AC.setForeground(Color.red);
 		AC.setBounds(28, 155, 100, 30);
 		        
 		// 初始化计算器上15个函数功能键的按钮
@@ -166,17 +174,21 @@ public class zlz_calculator extends JFrame implements ActionListener{
         JPanel Pane2 = new JPanel();
         Pane2.setLayout(null);
         // finance界面文本显示区域
+        fText.setLineWrap(true);
         final JScrollPane scrollPane2 = new JScrollPane (fText);
         scrollPane2.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
-        scrollPane2.setHorizontalScrollBarPolicy ( ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS );
         scrollPane2.setBounds(28, 20, 370, 200);
         Pane2.add(scrollPane2);
-        // 初始化clear按键
+        // 初始化clear按键和ENTER按键
         Pane2.add(clear);
-		clear.setBounds(28, 240, 100, 30);
+        Pane2.add(ENTER);
+        clear.setBounds(28, 240, 100, 30);
+        ENTER.setBounds(298, 240, 100, 30);
+        ENTER.setForeground(Color.red);
+        clear.setForeground(Color.red);
 		// 初始化EAR按钮
 		f_keys[0] = new JButton(F_KEYS[0]);
-		f_keys[0].setBounds(298, 240, 100, 30);
+		f_keys[0].setBounds(163, 240, 100, 30);
 		Pane2.add(f_keys[0]);
 		// 初始化后12个函数功能键的按钮
         for(int i = 0; i < 12; i++) {
@@ -202,10 +214,10 @@ public class zlz_calculator extends JFrame implements ActionListener{
         }
         matrix_keys[0].setBounds(28, 285, 100, 30);
         matrix_keys[1].setBounds(298, 285, 100, 30);
-        matrix_keys[2].setBounds(163, 285, 100, 30);
+        matrix_keys[0].setForeground(Color.red);
+        matrix_keys[1].setForeground(Color.red);
         Pane3.add(matrix_keys[0]);
         Pane3.add(matrix_keys[1]);
-        Pane3.add(matrix_keys[2]);
         for(int i = 0; i < 9; i++) {
             matrix_keys[i+2].setBounds(i%3*(100+35)+28, i/3*(30+20)+335, 100, 30);
             Pane3.add(matrix_keys[i+2]);
@@ -237,7 +249,8 @@ public class zlz_calculator extends JFrame implements ActionListener{
         }
         //为finance界面按钮添加监听器
         clear.addActionListener(this);
-        for (int i = 0; i < 12; i++) {
+        ENTER.addActionListener(this);
+        for (int i = 0; i < 13; i++) {
         	f_keys[i].addActionListener(this);
         }
         //为matrix面板按钮按键添加监听器
@@ -304,35 +317,37 @@ public class zlz_calculator extends JFrame implements ActionListener{
         	handelEig();
         } else if(label.equals("Answer")){
         	handelAnswer();
-        }else if(label.equals("clear")){
+        } else if(label.equals("CLEAR")){
         	handelclear();
-        }else if(label.equals("EAR")){ //Finance界面函数按钮
+        } else if(label.equals("EAR")){ //Finance界面函数按钮
         	handelEAR();
-        }else if(label.equals("call")){
+        } else if(label.equals("call")){
         	 handelcall();
-        }else if(label.equals("put")){
+        } else if(label.equals("put")){
         	 handelput();
-        }else if(label.equals("pvc")){
+        } else if(label.equals("pvc")){
         	handelpvc();
-        }else if(label.equals("fvc")){
+        } else if(label.equals("fvc")){
         	handelfvc();
-        }else if(label.equals("fpwsc")){
+        } else if(label.equals("fpwsc")){
         	handelfpwsc();
-        }else if(label.equals("fpwcy")){
+        } else if(label.equals("fpwcy")){
         	handelfpwcy();
-        }else if(label.equals("FV")){
+        } else if(label.equals("FV")){
         	handelFV();
-        }else if(label.equals("PV")){
+        } else if(label.equals("PV")){
         	handelPV();
-        }else if(label.equals("PMT")){
+        } else if(label.equals("PMT")){
         	handelPMT();
-        }else if(label.equals("forward")){
+        } else if(label.equals("forward")){
         	handelforward();
-        }else if(label.equals("forwardwcs")){
-        	handelforwardwcs();
-        }else if(label.equals("fpwcdy")){
+        } else if(label.equals("forwardwcs")){
+         	handelforwardwcs();
+        } else if(label.equals("fpwcdy")){
         	handelfpwcdy();
-        }else {
+        } else if(label.equals("ENTER")){
+        	handleENTER();
+        } else {
             handle(label); //Science界面数字键，+-*、，π，^
         }  
     }
@@ -629,6 +644,66 @@ public class zlz_calculator extends JFrame implements ActionListener{
     /**
      * Finance界面按钮
      */
+    private void handleENTER() {
+    	String s = fText.getText();
+    	switch(AnswerStatus) {
+    	case 1://EAR
+    		get_1(s);
+    	    fText.setText("EAR:\n" + String.valueOf(EAR(num1[0],(int)num1[1])));
+    	    break;
+    	case 2://call
+    		get_1(s);
+    	    fText.setText("call price:\n" + String.valueOf(CallPrice(num1[0],num1[1],num1[2],num1[3],num1[4]))); 
+    	    break;
+    	case 3://put
+    	    get_1(s);
+    	    fText.setText("put price:\n" + String.valueOf(PutPrice(num1[0],num1[1],num1[2],num1[3],num1[4])));
+    	    break;
+    	case 4://pvc
+    		get_2(s);
+        	fText.setText("pvc:\n" + String.valueOf(PVC((int)num1[0],num1[1],num2)));
+        	break;
+    	case 5://fvc
+    		get_2(s);
+        	fText.setText("fvc:\n" + String.valueOf(FVC((int)num1[0],num1[1],num2)));
+        	break;
+    	case 6://fpwsc
+    		get_1(s);
+    	    fText.setText("fpwsc:\n" + String.valueOf(fpwsc(num1[0],num1[1],(int)num1[2],num1[3])));
+    	    break;
+    	case 7://fpwcy
+    		get_1(s);
+    	    fText.setText("fpwcy:\n" + String.valueOf(fpwcy(num1[0],num1[1],(int)num1[2],num1[3])));
+    	    break;
+    	case 8://FV
+    		get_1(s);
+    	    fText.setText("FV:\n" + String.valueOf(FV(num1[0],num1[1],(int)num1[2])));
+    	    break;
+    	case 9://PV
+    	    get_1(s);
+    	    fText.setText("PV:\n" + String.valueOf(PV(num1[0],num1[1],(int)num1[2])));
+    	    break;
+    	case 10://PMT
+    		get_1(s);
+    	    fText.setText("PMT:\n" + String.valueOf(PMT(num1[0],num1[1],(int)num1[2])));
+    	    break;
+    	case 11://forward
+    		get_1(s);
+    	    fText.setText("forward:\n" + String.valueOf(forward(num1[0],num1[1],(int)num1[2])));
+    	    break;
+    	case 12://forwardwcs
+    		get_1(s);
+    	    fText.setText("forwardwcs:\n" + String.valueOf(forwardwcs(num1[0],num1[1],(int)num1[2],num1[3])));
+    	    break;
+    	case 13://fpwcdy
+            get_1(s);
+    	    fText.setText("fpwcdy:\n" + String.valueOf(fpwcdy(num1[0],num1[1],(int)num1[2])));
+    	    break;
+        default:
+    		fText.setText("please input again.");
+    	}
+    	AnswerStatus = 0;
+    }
     //处理clear健被按下的按钮
     private void handelclear(){
     	fText.setText("");
@@ -636,107 +711,93 @@ public class zlz_calculator extends JFrame implements ActionListener{
     
     //处理EAR健被按下的按钮
     private void handelEAR(){
-    	String s = fText.getText();
-    	fText.setText("");
-	    get_1(s);
-	    fText.setText(String.valueOf(EAR(num1[0],(int)num1[1])));
-	    
+    	fText.setText("input r and m with a comma seperating\nthem.\nExample:\n1,2\nPress 'CLEAR' to input."
+    			+ "\nThen Press 'ENTER' to compute.");
+    	AnswerStatus = 1;
     }
     
     //处理call健被按下的按钮
     private void handelcall(){
-    	String s = fText.getText();
-    	fText.setText("");
-	    get_1(s);
-	    fText.setText(String.valueOf(CallPrice(num1[0],num1[1],num1[2],num1[3],num1[4]))); 
-    }
+    	fText.setText("input s,k,r,d,t one by one with commas\nbetween them."
+    			+ "\nExample:\n1,2,3,4,5\nPress 'CLEAR' to input.\nThen Press 'ENTER' to compute.");
+    	AnswerStatus = 2;
+	}
     
     //处理put健被按下的按钮
     private void handelput(){
-    	String s = fText.getText();
-    	fText.setText("");
-	    get_1(s);
-	    fText.setText(String.valueOf(PutPrice(num1[0],num1[1],num1[2],num1[3],num1[4])));  
+    	fText.setText("input s,k,r,d,t one by one with commas\nbetween them."
+    			+ "\nExample:\n1,2,3,4,5\nPress 'CLEAR' to input.\nThen Press 'ENTER' to compute.");
+	    AnswerStatus = 3;
     }
     
     //处理pvc健被按下的按钮
     private void handelpvc(){
-    	String s = fText.getText();
-    	fText.setText("");
-    	get_2(s);
-    	fText.setText(String.valueOf(PVC((int)num1[0],num1[1],num2)));
+    	fText.setText("input n,r and cashes.\nExample:\n3,2.3;1.1,2.2,3.3\nPress 'CLEAR' to input."
+    			+ "\nThen Press 'ENTER' to compute.");
+    	AnswerStatus = 4;
     }
     
     //处理fvc健被按下的按钮
     private void handelfvc(){
-    	String s = fText.getText();
-    	fText.setText("");
-    	get_2(s);
-    	fText.setText(String.valueOf(FVC((int)num1[0],num1[1],num2)));
+    	fText.setText("input n,r and cashes.\nExample:\n3,2.3;1.1,2.2,3.3\nPress 'CLEAR' to input."
+    			+ "\nThen Press 'ENTER' to compute.");
+    	AnswerStatus = 5;
     }
     
     //处理fpwsc健被按下的按钮
     private void handelfpwsc(){
-    	String s = fText.getText();
-    	fText.setText("");
-	    get_1(s);
-	    fText.setText(String.valueOf(fpwsc(num1[0],num1[1],(int)num1[2],num1[3])));  
+    	fText.setText("input s,r,t,u one by one.\nExample:\n1.1,2.2,3.3,4.4\nPress 'CLEAR' to input."
+    			+ "\nThen Press 'ENTER' to compute.");
+	    AnswerStatus = 6;  
     }
     
     //处理fpwcy健被按下的按钮
     private void handelfpwcy(){
-    	String s = fText.getText();
-    	fText.setText("");
-	    get_1(s);
-	    fText.setText(String.valueOf(fpwcy(num1[0],num1[1],(int)num1[2],num1[3]))); 
+    	fText.setText("input s,r,t,c one by one.\nExample:\n1.1,2.2,3.3,4.4\nPress 'CLEAR' to input."
+    			+ "\nThen Press 'ENTER' to compute.");
+    	AnswerStatus = 7;
     }
     
     //处理FV健被按下的按钮
     private void handelFV(){
-    	String s = fText.getText();
-    	fText.setText("");
-	    get_1(s);
-	    fText.setText(String.valueOf(FV(num1[0],num1[1],(int)num1[2]))); 
-    }
+    	fText.setText("input p,r,t one by one.\nExample:\n1.1,2.2,3\nPress 'CLEAR' to input."
+    			+ "\nThen Press 'ENTER' to compute.");
+    	AnswerStatus = 8;
+   }
     
     //处理PV健被按下的按钮
     private void handelPV(){
-    	String s = fText.getText();
-    	fText.setText("");
-	    get_1(s);
-	    fText.setText(String.valueOf(PV(num1[0],num1[1],(int)num1[2]))); 
+    	fText.setText("input p,r,t one by one.\nExample:\n1.1,2.2,3\nPress 'CLEAR' to input."
+    			+ "\nThen Press 'ENTER' to compute.");
+    	AnswerStatus = 9;
     }
     
     //处理PMT健被按下的按钮
     private void handelPMT(){
-    	String s = fText.getText();
-    	fText.setText("");
-	    get_1(s);
-	    fText.setText(String.valueOf(PMT(num1[0],num1[1],(int)num1[2]))); 
+    	fText.setText("input p,r,t one by one.\nExample:\n1.1,2.2,3\nPress 'CLEAR' to input."
+    			+ "\nThen Press 'ENTER' to compute.");
+    	AnswerStatus = 10;
     }
     
     //处理forward健被按下的按钮
     private void handelforward(){
-    	String s = fText.getText();
-    	fText.setText("");
-	    get_1(s);
-	    fText.setText(String.valueOf(forward(num1[0],num1[1],(int)num1[2])));
+    	fText.setText("input s,r,t one by one.\nExample:\n1.1,2.2,3\nPress 'CLEAR' to input."
+    			+ "\nThen Press 'ENTER' to compute.");
+    	AnswerStatus = 11;
     }
     
     //处理forwardwcs健被按下的按钮
     private void handelforwardwcs(){
-    	String s = fText.getText();
-    	fText.setText("");
-	    get_1(s);
-	    fText.setText(String.valueOf(forwardwcs(num1[0],num1[1],(int)num1[2],num1[3])));
+    	fText.setText("input s,r,t,i one by one.\nExample:\n1.1,2.2,3,4.4\nPress 'CLEAR' to input."
+    			+ "\nThen Press 'ENTER' to compute.");
+    	AnswerStatus = 12;
     }
     
     //处理fpwcdy健被按下的按钮
     private void handelfpwcdy(){
-    	String s = fText.getText();
-    	fText.setText("");
-	    get_1(s);
-	    fText.setText(String.valueOf(fpwcdy(num1[0],num1[1],(int)num1[2]))); 
+    	fText.setText("input s,q,t one by one.\nExample:\n1.1,2.2,3,\nPress 'CLEAR' to input."
+    			+ "\nThen Press 'ENTER' to compute.");
+    	AnswerStatus = 13;
     }
     
     /** 
