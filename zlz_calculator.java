@@ -202,9 +202,9 @@ public class zlz_calculator extends JFrame implements ActionListener{
         Pane3.setLayout(null);
         
         // matrix界面文本显示区域
+        textArea.setLineWrap(true);
         final JScrollPane scrollPane = new JScrollPane ( textArea );
         scrollPane.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
-        scrollPane.setHorizontalScrollBarPolicy ( ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS );
         scrollPane.setBounds(28, 20, 370, 240);
         Pane3.add(scrollPane);
         
@@ -1232,7 +1232,7 @@ public class zlz_calculator extends JFrame implements ActionListener{
         if (addend[0].length != summand.length) {
             //throw new IllegalArgumentException("summand and summand not the same type!");
         	textArea.setText("");
-        	textArea.setText("矩阵A列数与矩阵B行数不一致，请重新输入");
+        	textArea.setText("matrix A and matrix B are not the same type!");
         } 
         double[][] sum = new double[row][col];
         for (int i = 0; i < row; i++) {
@@ -1306,7 +1306,7 @@ public class zlz_calculator extends JFrame implements ActionListener{
 	        if (row != summand.length || col != summand[0].length) {
 	            //throw new IllegalArgumentException("summand and summand not the same type!");
 	        	textArea.setText("");
-	        	textArea.setText("两矩阵行数列数不相等，请重新输入");
+	        	textArea.setText("matrix A and matrix B are not the same type!");
 	        }
 	        double[][] sum = new double[row][col];
 	        for (int i = 0; i < row; i++) {
@@ -2066,7 +2066,7 @@ public class zlz_calculator extends JFrame implements ActionListener{
     	double total = 0;
     		
     	for(i=0; i<n; i++){
-    		total+=cash[i]*Math.pow(1+r, 1+i);
+    		total+=cash[i]*Math.pow(1+r, n - 1 - i);
     	}
     	return total;
     }
