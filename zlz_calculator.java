@@ -2110,7 +2110,7 @@ public class zlz_calculator extends JFrame implements ActionListener{
     
     //PMT
     private static double PMT(double p, double r, int t){
-    	double pmt = p*(r/12)*Math.pow(1+r/12, 12*t)/(Math.pow(1+r/12, 180)-1);
+    	double pmt = p*(1 - 1/Math.pow(1 + r,  t))/r;
     	DecimalFormat df = new DecimalFormat( "0.000000 "); 
 		return Double.valueOf(df.format(pmt)).doubleValue();
     }
