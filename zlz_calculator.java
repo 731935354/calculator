@@ -2010,9 +2010,10 @@ public class zlz_calculator extends JFrame implements ActionListener{
     }
     private static double EAR(double r, int m){//EAR:effective annual rate
     	double ear=Math.pow(1+r/m,m)-1;          
-    	return ear;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(ear)).doubleValue();
     }
-    //按钮"call"和第3个按钮"put"
+    //"call" "put"
     private static double d(double s, double k, double r, double d, double t){
     	double d1=(Math.log(s/k)+(r+d*d/2)*t)/(d*Math.sqrt(t));
     	return d1;
@@ -2040,13 +2041,15 @@ public class zlz_calculator extends JFrame implements ActionListener{
     	double d1=d(s, k, r, d, t);
     	double d2=d1-d*Math.sqrt(t);
     	double c = s*NORMSDIST(d1)-k*Math.pow(Math.E, -r*t)*NORMSDIST(d2);
-    	return c;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(c)).doubleValue();
     } 
     private static double PutPrice(double s, double k, double r, double d, double t){
     	double d1=d(s, k, r, d, t);
     	double d2=d1-d*Math.sqrt(t);
     	double p = k*Math.pow(Math.E, -r*t)*NORMSDIST(-d2)-s*NORMSDIST(-d1);
-    	return p;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(p)).doubleValue();
     }
 
     //pvc
@@ -2057,7 +2060,8 @@ public class zlz_calculator extends JFrame implements ActionListener{
     	for(i=0; i<n; i++){
     		total+=cash[i]/Math.pow(1+r, 1+i);
     	}
-    	return total;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(total)).doubleValue();
     }
 
     //fvc
@@ -2068,17 +2072,20 @@ public class zlz_calculator extends JFrame implements ActionListener{
     	for(i=0; i<n; i++){
     		total+=cash[i]*Math.pow(1+r, n - 1 - i);
     	}
-    	return total;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(total)).doubleValue();
     }
     //fpwsc
     private static double fpwsc(double s, double r, int t, double u){
     	double fpwsc = s*Math.pow(Math.E, (r+u)*t);
-    	return fpwsc;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(fpwsc)).doubleValue();
     }
     //fpwcy
     private static double fpwcy(double s, double r, int t, double c){
     	double fpwcy = s*Math.pow(Math.E, (r-c)*t);
-    	return fpwcy;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(fpwcy)).doubleValue();
     }
 
     //FV
@@ -2087,7 +2094,8 @@ public class zlz_calculator extends JFrame implements ActionListener{
     	for(i=1; i<=t; i++){
     		p*=(1+r);
     	}
-    	return p;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(p)).doubleValue();
     }
     
     //PV
@@ -2096,30 +2104,35 @@ public class zlz_calculator extends JFrame implements ActionListener{
     	for(i=1; i<=t; i++){
     		p/=(1+r);
     	}
-    	return p;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(p)).doubleValue();
     }
     
     //PMT
     private static double PMT(double p, double r, int t){
     	double pmt = p*(r/12)*Math.pow(1+r/12, 12*t)/(Math.pow(1+r/12, 180)-1);
-    	return pmt;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(pmt)).doubleValue();
     }
     
     //forward
     private static double forward(double s, double r, int t){
     	double f = s*Math.pow(Math.E, r*t);
-    	return f;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(f)).doubleValue();
     }
     
     //forwardwcs
     private static double forwardwcs(double s, double r, int t, double i){
     	double fwcs = (s-i)*Math.pow(Math.E, r*t);
-    	return fwcs;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(fwcs)).doubleValue();
     }
     //fpwcdy
     private static double fpwcdy(double s, double q, int t){
     	double fpwcdy = s*Math.pow(Math.E, (t-q)*t);
-    	return fpwcdy;
+    	DecimalFormat df = new DecimalFormat( "0.000000 "); 
+		return Double.valueOf(df.format(fpwcdy)).doubleValue();
     }
 	
     /**
