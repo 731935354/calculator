@@ -3,25 +3,31 @@ package cal;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JRadioButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
-import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
+import com.jtattoo.*;
 
 import java.lang.Math;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-
 
 public class zlz_calculator extends JFrame implements ActionListener{
 	
@@ -29,6 +35,9 @@ public class zlz_calculator extends JFrame implements ActionListener{
 	 * 
 	 */
 	private static final long serialVersionUID = 8495393877621495993L;
+	//存储界面风格LookAndFeel名字
+	private static String runstyle;
+	
 	/**
 	 * Science界面
 	 */
@@ -93,6 +102,14 @@ public class zlz_calculator extends JFrame implements ActionListener{
     private double[][] dif1;
     private double[][] mul1;
     
+    /**
+     * Skin界面
+     */
+ 	JRadioButton rb1,rb2,rb3,rb4,rb5,rb6,rb7,rb8,rb9,rb10,rb11,rb12,rb13;
+ 	JButton apply = new JButton("apply");
+ 	ButtonGroup bg;
+ 	JPanel p2;
+    
     public zlz_calculator() {
         super();
         // 初始化计算器
@@ -109,6 +126,8 @@ public class zlz_calculator extends JFrame implements ActionListener{
         this.setSize(435, 575);
         // 不许修改计算器的大小
         this.setResizable(false);
+        // 设置窗口可见
+        this.setVisible(true);
     }
 	
 	//初始化计算器
@@ -222,11 +241,63 @@ public class zlz_calculator extends JFrame implements ActionListener{
             matrix_keys[i+2].setBounds(i%3*(100+35)+28, i/3*(30+20)+335, 100, 30);
             Pane3.add(matrix_keys[i+2]);
         }
+        // pane4
+        JPanel Pane4 = new JPanel();
+        Pane4.setLayout(null);
         
+        rb1 = new JRadioButton("acryl",true);
+        rb2 = new JRadioButton("aero");
+        rb3 = new JRadioButton("aluminium");
+        rb4 = new JRadioButton("bernstein");
+        rb5 = new JRadioButton("fast");
+        rb6 = new JRadioButton("garphite");
+        rb7 = new JRadioButton("hifi");
+        rb8 = new JRadioButton("luna");
+        rb9 = new JRadioButton("mcwin");
+        rb10 = new JRadioButton("mint");
+        rb11 = new JRadioButton("noire");
+        rb12 = new JRadioButton("smart");
+        rb13 = new JRadioButton("texture");
+        bg = new ButtonGroup();
+        bg.add(rb1);
+        bg.add(rb2);
+        bg.add(rb3);
+        bg.add(rb4);
+        bg.add(rb5);
+        bg.add(rb6);
+        bg.add(rb7);
+        bg.add(rb8);
+        bg.add(rb9);
+        bg.add(rb10);
+        bg.add(rb11);
+        bg.add(rb12);
+        bg.add(rb13);
+        p2 = new JPanel(new GridLayout(0,1));
+        p2.setBorder(BorderFactory.createTitledBorder("choose your skin"));
+        p2.add(rb1);
+        p2.add(rb2);
+        p2.add(rb3);
+        p2.add(rb4);
+        p2.add(rb5);
+        p2.add(rb6);
+        p2.add(rb7);
+        p2.add(rb8);
+        p2.add(rb9);
+        p2.add(rb10);
+        p2.add(rb11);
+        p2.add(rb12);
+        p2.add(rb13);
+        p2.setBounds(28, 25, 370, 430);
+        Pane4.add(p2); 
+        apply.addActionListener(this);
+        apply.setBounds(335/2, 470, 100, 30);
+        Pane4.add(apply);
+       
         //将三个面板加入tabbedpand
         background.add("Science",Pane1);
         background.add("Finance",Pane2);
         background.add("Matrix",Pane3);
+        background.add("skin", Pane4);
         
         //将选项卡窗体加入到主窗体上
         getContentPane().add(background, BorderLayout.CENTER);
@@ -237,7 +308,7 @@ public class zlz_calculator extends JFrame implements ActionListener{
 		 * 为各按钮添加事件侦听器
 		 * 都使用同一个事件侦听器，即本对象。本类的声明中有implements ActionListener
 		 */
-        
+		
 		// 为science界面按钮添加监听器
 		backspace.addActionListener(this);
         AC.addActionListener(this);
@@ -261,6 +332,7 @@ public class zlz_calculator extends JFrame implements ActionListener{
 	
 	//处理事件
     public void actionPerformed(ActionEvent e) {
+    	
     	String label = e.getActionCommand(); // 获取事件源的标签
         if (label.equals("←")) {
             handleBackspace(); // 用户按了"Backspace"键
@@ -349,7 +421,37 @@ public class zlz_calculator extends JFrame implements ActionListener{
         	handleENTER();
         } else {
             handle(label); //Science界面数字键，+-*、，π，^
-        }  
+        }
+        if(e.getSource()==apply){
+ 		   if(rb1.isSelected()){
+ 		       runstyle = "com.jtattoo.plaf.acryl.AcrylLookAndFeel";
+ 		   }else if(rb2.isSelected()){
+ 		       runstyle = "com.jtattoo.plaf.aero.AeroLookAndFeel";
+ 		   }else if(rb3.isSelected()){
+ 		       runstyle = "com.jtattoo.plaf.aluminium.AluminiumLookAndFeel";
+ 		   }else if(rb4.isSelected()){
+ 	 		   runstyle = "com.jtattoo.plaf.bernstein.BernsteinLookAndFeel";
+ 	 	   }else if(rb5.isSelected()){
+ 	 		   runstyle = "com.jtattoo.plaf.fast.FastLookAndFeel";
+ 	 	   }else if(rb6.isSelected()){
+ 		       runstyle = "com.jtattoo.plaf.graphite.GraphiteLookAndFeel";
+ 		   }else if(rb7.isSelected()){
+ 		       runstyle = "com.jtattoo.plaf.hifi.HiFiLookAndFeel";
+ 		   }else if(rb8.isSelected()){
+ 		       runstyle = "com.jtattoo.plaf.luna.LunaLookAndFeel";
+ 		   }else if(rb9.isSelected()){
+ 		       runstyle = "com.jtattoo.plaf.mcwin.McWinLookAndFeel";
+ 		   }else if(rb10.isSelected()){
+ 		       runstyle = "com.jtattoo.plaf.mint.MintLookAndFeel";
+ 		   }else if(rb11.isSelected()){
+ 		       runstyle = "com.jtattoo.plaf.noire.NoireLookAndFeel";
+ 		   }else if(rb12.isSelected()){
+ 		       runstyle = "com.jtattoo.plaf.smart.SmartLookAndFeel";
+ 		   }else if(rb13.isSelected()){
+ 		       runstyle = "com.jtattoo.plaf.texture.TextureLookAndFeel";
+ 		   }
+ 		   show_window(runstyle);
+ 		 }
     }
     
     //处理Abs键被按下的事件
@@ -2167,24 +2269,42 @@ public class zlz_calculator extends JFrame implements ActionListener{
 			}
 	 }
 	
+	 public void show_window(String runstyle){
+		 try {
+		     //此行代码抛出的全部异常  
+		     //风格由 UIManager类 来控制     具体自己看API吧 
+		     UIManager.setLookAndFeel(runstyle);
+		     } catch (ClassNotFoundException e) {
+		    	 e.printStackTrace();
+		     } catch (InstantiationException e) {
+		    	 e.printStackTrace();
+		     } catch (IllegalAccessException e) {
+		    	 e.printStackTrace();
+		     } catch (UnsupportedLookAndFeelException e) {
+		    	 e.printStackTrace();
+		     }
+		     //这行不可少的，按照当前风格更新组件
+		     SwingUtilities.updateComponentTreeUI(this);  
+	}
+	
 	public static void main(String[] args)
 	{
-	    try
-	    {
-	    	// 设置皮肤
-	    	BeautyEyeLNFHelper.frameBorderStyle = BeautyEyeLNFHelper.FrameBorderStyle.generalNoTranslucencyShadow;
-	        org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.launchBeautyEyeLNF();
-	        //取消显示“设置”选项
-	        UIManager.put("RootPane.setupButtonVisible", false);
-	        //控制JTabbedPane左缩进
-	        UIManager.put("TabbedPane.tabAreaInsets"
-	        	    , new javax.swing.plaf.InsetsUIResource(3,20,2,20));
-	    }
-	    catch(Exception e)
-	    {
-	        
-	    }
-	    new zlz_calculator().setVisible(true);
+		try {
+		     //此行代码抛出的全部异常  
+		     //风格由 UIManager类 来控制     具体自己看API吧 
+			UIManager.setLookAndFeel("com.jtattoo.plaf.aluminium.AluminiumLookAndFeel");
+		     } catch (ClassNotFoundException e) {
+		    	 e.printStackTrace();
+		     } catch (InstantiationException e) {
+		    	 e.printStackTrace();
+		     } catch (IllegalAccessException e) {
+		    	 e.printStackTrace();
+		     } catch (UnsupportedLookAndFeelException e) {
+		    	 e.printStackTrace();
+		     }
+		
+		new zlz_calculator();
 	}
+	
 
 }
